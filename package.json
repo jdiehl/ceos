@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Ceos is an oppiniated graphql server based on apollo-server and sequelize",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/jdiehl/ceos.git"
+    "type": "git",
+    "url": "https://github.com/jdiehl/ceos.git"
   },
   "main": "index.js",
   "keywords": [],
@@ -17,6 +17,8 @@
     "apollo-server": "^2.9.14",
     "graphql": "^14.5.8",
     "jsonwebtoken": "^8.5.1",
+    "pg": "^7.15.1",
+    "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.3"
   }
 }

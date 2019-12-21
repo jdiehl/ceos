@@ -8,17 +8,16 @@ Oppiniated graphql server based on apollo-server and sequelize
 1. All communication between client and server is done via GraphQL
 2. All configuration is done with environment variables
 3. User authentication is done via email and password
-4. Sequelize is used as an asbtraction layer for the database
+4. Sequelize is used with a PostGRES database
 
 
 ## Usage
 
 1. Add `ceos` to your project
-2. Add the database package of your choice (e.g. `pg` with `pg-hstore`)
-3. Set up the environment variables (e.g. with `dotenv`)
-4. Define your models (see below)
-5. Define your schema extensions (see below)
-6. Start the server (see below)
+2. Set up the environment variables (e.g. with `dotenv`)
+3. Define your models (see below)
+4. Define your schema extensions (see below)
+5. Start the server (see below)
 
 
 ## Configuration Variables
