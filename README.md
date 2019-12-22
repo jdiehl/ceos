@@ -1,6 +1,6 @@
 # CEOS
 
-Oppiniated graphql server based on apollo-server and sequelize
+Opinionated graphql server based on apollo-server and sequelize
 
 
 ## Assumptions
