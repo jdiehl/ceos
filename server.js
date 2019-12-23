@@ -7,8 +7,8 @@ const middlewares = []
 const resolvers = { Query: {}, Mutation: {} }
 const typeDefs = []
 
-function context(params) {
-  let context = {}
+function context (params) {
+  const context = {}
   for (const middleware of middlewares) {
     middleware(params, context)
   }
@@ -43,5 +43,5 @@ exports.extendSchema = (schema) => {
 exports.serve = async () => {
   if (typeDefs.length === 0) throw new Error('Use extendSchema to define the schema before starting the server')
   const server = new apollo.ApolloServer({ typeDefs, resolvers, context })
-  return await server.listen(PORT, '0.0.0.0')
+  return server.listen(PORT, '0.0.0.0')
 }
