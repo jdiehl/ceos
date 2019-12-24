@@ -15,9 +15,8 @@ Opinionated graphql server based on apollo-server and sequelize
 
 1. Add `ceos` to your project
 2. Set up the environment variables (e.g. with `dotenv`)
-3. Define your models (see below)
-4. Define your schema extensions (see below)
-5. Start the server (see below)
+3. Add you extensions
+4. Start the server (see below)
 
 
 ## Configuration Variables
@@ -30,7 +29,17 @@ Opinionated graphql server based on apollo-server and sequelize
 * `JWT_EXPIRES`: Expiry time of the JSON Web Token (see [jsonwebtoken documentation](https://github.com/auth0/node-jsonwebtoken#readme) for details)
 
 
-## Define Your Models
+## Add Your Extensions
+
+Extensions are comprised of four modules:
+
+* `mutations`: Exposed graphql Mutation functions
+* `queries`: Exposed graphql Query functions
+* `typeDefs`: Exposed graphql type definitions (extend Query and Mutation as appropriate)
+* `middleware`: Function that changes the `apollo-server` context object
+* Optional: a sequelize model definition
+
+### Model Definition
 
 ```js
 const { Sequelize, sequelize } = require('ceos/sequelize')
@@ -46,58 +55,17 @@ exports.User = User
 
 Refer to the [Sequelize documentation](https://sequelize.org/master/manual/models-definition.html) for details.
 
-
-## Define Your Schema Extensions
-
-```js
-const { AuthenticationError, gql, extendSchema } = require('ceos/server')
-const { User } = require('../models/User')
-
-const Query = {
-  users: async (parent, args, context) => {
-    return await User.findAll({})
-  },
-  ...
-}
-
-const Mutation = {
-  createUser: async (parent, args, context) => {
-    if (!context.auth) throw new AuthenticationError('Not authenticated')
-    ...
-  }
-}
-
-const typeDefs = gql`
-type User {
-  id: Int!
-  email: String!
-}
-
-type Query {
-  users: [User]
-}
-
-type Mutation {
-  create(email: String!, password: String!): User
-}
-`
-
-extendSchema({ Query, Mutation, typeDefs })
-```
-
-Note that the first imported schema must define Query and Mutation. All others must extend it.
-
-
 ## Start The Server
 
 ```js
 require('dotenv').config()
 
 const { serve } = require('ceos/server')
-const pkg = require('../package.json')
+const pkg = require('./package.json')
+const extension = require('./extension')
 
 // require all schema extensions to initialize them
-require('./schema/...')
+use(extension)
 
 serve().then(
   server => console.log(`${pkg.name} v${pkg.version} listening at ${url}`),
