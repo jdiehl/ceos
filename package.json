@@ -1,6 +1,6 @@
 {
   "name": "ceos",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Ceos is an opinionated graphql server based on apollo-server and sequelize",
   "repository": {
     "type": "git",

@@ -1,11 +1,11 @@
 const { AuthenticationError } = require('apollo-server')
 
-const { makeJWT } = require('../../util')
+const { encodeJWT } = require('../../util')
 const User = require('./User')
 
-function makeUserResponse(me) {
+function makeAuthResponse(me) {
   const { id, roles } = me
-  const { token, expires } = makeJWT({ id, roles })
+  const { token, expires } = encodeJWT({ id, roles })
   return { token, expires: expires.toJSON(), me }
 }
 
@@ -24,7 +24,7 @@ async function signup(parent, args, context) {
 
   await me.save()
 
-  return makeUserResponse(me)
+  return makeAuthResponse(me)
 }
 
 async function login(parent, args) {
@@ -36,7 +36,7 @@ async function login(parent, args) {
   const valid = me.verifyPassword(password)
   if (!valid) throw new AuthenticationError('Invalid password')
 
-  return makeUserResponse(me)
+  return makeAuthResponse(me)
 }
 
 module.exports = {
