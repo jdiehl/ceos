@@ -1,5 +1,5 @@
 const User = require('./User')
-const { requireRole, requireAdmin } = require('../../util')
+const { requireRole } = require('../../util')
 
 async function users(parent, args, context) {
   requireRole(context, 'admin')
@@ -7,7 +7,7 @@ async function users(parent, args, context) {
 }
 
 async function me(parent, args, context) {
-  requireAdmin(context)
+  requireRole(context)
   const { id } = context.auth
   const user = await User.findByPk(id)
   return user
