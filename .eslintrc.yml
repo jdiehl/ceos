@@ -10,5 +10,6 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules: {
-  space-before-function-paren: [error, { anonymous: "always", named: "never", asyncArrow: "always" }]
+  space-before-function-paren: [error, { anonymous: "always", named: "never", asyncArrow: "always" }],
+  padded-blocks: 0
 }

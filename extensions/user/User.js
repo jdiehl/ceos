@@ -2,7 +2,7 @@ const { Sequelize, sequelize } = require('../../sequelize')
 const { map, makeHash, makeSalt, verifyHash } = require('../../util')
 
 class User extends Sequelize.Model {
-  setPassword(password) {
+  set password(password) {
     this.salt = makeSalt()
     this.passwordHash = makeHash(this.salt, password)
   }

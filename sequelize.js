@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize')
+const { Op, Sequelize } = require('sequelize')
 const { getEnv } = require('./util')
 
 const DB = getEnv('DB')
@@ -18,6 +18,7 @@ exports.sequelize = new Sequelize(DB, options)
 
 // Sequelize
 exports.Sequelize = Sequelize
+exports.Op = Op
 
 // sync database
 exports.sync = async (force) => {
