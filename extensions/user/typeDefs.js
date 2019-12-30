@@ -1,14 +1,19 @@
 const { gql } = require('apollo-server')
 
 module.exports = gql`
-type UserRoles {
+type UserAccess {
   admin: Boolean
+}
+
+type UserProfile {
+  name: String
 }
 
 type User {
   id: Int!
   email: String!
-  roles: UserRoles
+  access: UserAccess
+  profile: UserProfile
 }
 
 type UserAuth {
@@ -17,16 +22,32 @@ type UserAuth {
   me: User!
 }
 
+input UserAccessInput {
+  admin: Boolean
+}
+
+input UserProfileInput {
+  name: String
+}
+
+input UserInput {
+  email: String
+  password: String
+  access: UserAccessInput
+  profile: UserProfileInput
+}
+
 extend type Query {
-  users: [User]
-  me: User
+  users: [User]!
+  user(id: Int!): User!
+  me: User!
 }
 
 extend type Mutation {
-  signup(email: String!, password: String!): UserAuth
-  login(email: String!, password: String!): UserAuth
-  setPassword(password: String!, oldPassword: String!): Boolean
-  setUserRole(id: Int!, role: String!, active: Boolean!): Boolean
-  updateUser(id: Int!, email: String, password: String, roles: [String]): Boolean
+  signupUser(email: String!, password: String!): UserAuth!
+  loginUser(email: String!, password: String!): UserAuth!
+  createUser(input: UserInput!): User!
+  updateUser(id: Int!, input: UserInput!): User!
+  deleteUser(id: Int!): Boolean
 }
 `

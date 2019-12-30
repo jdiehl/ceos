@@ -1,16 +1,16 @@
-const { AuthenticationError } = require('apollo-server')
+const { AuthenticationError, NotFoundError } = require('apollo-server')
 
-const { encodeJWT, requireRole } = require('../../util')
+const { encodeJWT, requireAccess } = require('../../util')
 const User = require('./User')
 
 function makeAuthResponse(me) {
-  const { id, roles } = me
-  const { token, expires } = encodeJWT({ id, roles })
+  const { id, access } = me
+  const { token, expires } = encodeJWT({ id, access })
   return { token, expires: expires.toJSON(), me }
 }
 
 // sign up as a new user
-async function signup(parent, { email, password }, context) {
+async function signupUser(parent, { email, password }, context) {
 
   // create user
   const me = new User()
@@ -19,7 +19,7 @@ async function signup(parent, { email, password }, context) {
 
   // if admin token is present: make an admin
   if (context.adminToken) {
-    me.roles = { admin: true }
+    me.access = { admin: true }
   }
 
   await me.save()
@@ -27,11 +27,11 @@ async function signup(parent, { email, password }, context) {
   return makeAuthResponse(me)
 }
 
-async function login(parent, { email, password }) {
+async function loginUser(parent, { email, password }) {
 
   // find user
   const me = await User.findOne({ where: { email } })
-  if (!me) throw new AuthenticationError('User not found')
+  if (!me) throw new NotFoundError()
 
   // validate password
   const valid = me.verifyPassword(password)
@@ -40,65 +40,48 @@ async function login(parent, { email, password }) {
   return makeAuthResponse(me)
 }
 
-async function setPassword(parent, { password, oldPassword }, context) {
-  requireRole(context)
+async function createUser(parent, { input }, context) {
+  requireAccess(context, 'admin')
 
-  // find user
-  const me = await User.findByPk(context.auth.id)
+  // create user
+  const user = new User()
+  Object.assign(user, input)
+  await user.save()
 
-  // validate password
-  const valid = me.verifyPassword(oldPassword)
-  if (!valid) throw new AuthenticationError('Invalid password')
-
-  // update password
-  me.password = password
-  await me.save()
-
-  return true
+  return user
 }
 
-async function setUserRole(parent, { id, role, active }, context) {
-  requireRole(context, 'admin')
+async function updateUser(parent, { id, input }, context) {
+  console.log(context.auth)
+  requireAccess(context, 'admin')
 
   // find user
   const user = await User.findByPk(id)
-  if (!user) throw new AuthenticationError('User not found')
-
-  // cannot remove own admin role
-  if (user.id === context.auth.id && role === 'admin') throw new Error('Cannot remove own admin role')
+  if (!user) throw new NotFoundError()
 
   // update user
-  const { roles } = user
-  if (active) {
-    user.roles = Object.assign(roles, { [role]: true })
-  } else {
-    delete roles[role]
-    user.roles = roles
-  }
-
+  Object.assign(user, input)
   await user.save()
 
-  return true
+  return user
 }
 
-async function updateUser(parent, { id, ...args }, context) {
-  requireRole(context, 'admin')
+async function deleteUser(parent, { id }, context) {
+  requireAccess(context, 'admin')
 
   // find user
-  const user = await User.findByPk(id)
-  if (!user) throw new AuthenticationError('User not found')
+  const user = User.findByPk(id)
+  if (!user) throw new NotFoundError()
 
-  // update user
-  Object.assign(user, args)
-  await user.save()
+  await user.destroy()
 
   return true
 }
 
 module.exports = {
-  signup,
-  login,
-  setPassword,
-  setUserRole,
-  updateUser
+  signupUser,
+  loginUser,
+  createUser,
+  updateUser,
+  deleteUser
 }

@@ -1,8 +1,9 @@
 const { Sequelize, sequelize } = require('../../sequelize')
-const { map, makeHash, makeSalt, verifyHash } = require('../../util')
+const { fromHstore, makeHash, makeSalt, verifyHash } = require('../../util')
 
 class User extends Sequelize.Model {
   set password(password) {
+    if (password.length < 6) throw new Error('Insecure password')
     this.salt = makeSalt()
     this.passwordHash = makeHash(this.salt, password)
   }
@@ -16,7 +17,8 @@ User.init({
   email: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true
+    unique: true,
+    validate: { isEmail: true }
   },
   salt: {
     type: Sequelize.STRING,
@@ -26,17 +28,13 @@ User.init({
     type: Sequelize.STRING,
     allowNull: false
   },
-  roles: {
+  access: {
     type: Sequelize.HSTORE,
-    get() {
-      return map(this.getDataValue('roles'), value => value === 'true')
-    },
-    set(roles) {
-      this.setDataValue('roles', map(roles, value => value ? 'true' : 'false'))
-    }
+    get() { return fromHstore(this.getDataValue('access')) }
   },
   profile: {
-    type: Sequelize.HSTORE
+    type: Sequelize.HSTORE,
+    get() { return fromHstore(this.getDataValue('profile')) }
   }
 }, {
   sequelize,

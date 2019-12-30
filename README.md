@@ -27,7 +27,13 @@ Opinionated graphql server based on apollo-server and sequelize
 * `ADMIN_TOKEN`: Bearer Token for admin access
 * `JWT_SECRET`: Secret used to encrypt JSON Web Token (use a random string here)
 * `JWT_EXPIRES`: Expiry time of the JSON Web Token (see [jsonwebtoken documentation](https://github.com/auth0/node-jsonwebtoken#readme) for details)
+* `EXTENSIONS`: Specify which extensions to load
+* `CALENDAR_STATE`: `holiday-de` state to use for determining holidays
 
+
+## Built-in Extensions
+
+* `user`: users table with signup and login
 
 ## Add Your Extensions
 

@@ -3,18 +3,35 @@ const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
 const ms = require('ms')
 
+// convert value from Hstore
+function fromHstore(obj) {
+  return map(obj, value => {
+    if (value === 'true') return true
+    if (value === 'false') return false
+    const n = parseFloat(value)
+    if (!isNaN(n)) return n
+    return value
+  })
+}
+
 // read an environment variable
-function getEnv(name, type) {
+function getEnv(name, type, defaultValue) {
   let value = process.env[name]
-  if (value === undefined) throw new Error(`Missing Environment Variable ${name}`)
+  if (value === undefined) {
+    if (defaultValue !== undefined) return defaultValue
+    throw new Error(`Missing environment variable ${name}`)
+  }
   switch (type) {
     case 'int':
       value = parseInt(value, 10)
-      if (isNaN(value)) throw new Error(`Invalid Environment Variable ${name}: Must be an integer`)
+      if (isNaN(value)) throw new Error(`Invalid environment variable ${name}: must be an integer`)
       break
     case 'float':
       value = parseFloat(value)
-      if (isNaN(value)) throw new Error(`Invalid Environment Variable ${name}: Must be a float`)
+      if (isNaN(value)) throw new Error(`Invalid environment variable ${name}: must be a float`)
+      break
+    case 'array':
+      value = value === '' ? [] : value.split(',')
       break
   }
   return value
@@ -74,17 +91,19 @@ function map(object, callback) {
 }
 
 // check if the user has a role
-function requireRole(context, role) {
-  if (!context.auth || (role && (!context.auth.roles || !context.auth.roles[role]))) {
+function requireAccess(context, role) {
+  if (!context.auth || (role && (!context.auth.access || !context.auth.access[role]))) {
     throw new AuthenticationError(`Must be ${role || 'logged in'}`)
   }
 }
 
-function requireAdmin(context) {
+// require admin token
+function requireAdminToken(context) {
   if (!context.adminToken) throw new AuthenticationError('Requires admin token')
 }
 
 module.exports = {
+  fromHstore,
   getEnv,
   encodeJWT,
   decodeJWT,
@@ -93,6 +112,6 @@ module.exports = {
   verifyHash,
   each,
   map,
-  requireRole,
-  requireAdmin
+  requireAccess,
+  requireAdminToken
 }

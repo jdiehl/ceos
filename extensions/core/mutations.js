@@ -1,10 +1,9 @@
-const { AuthenticationError } = require('apollo-server')
 const { sync } = require('../../sequelize')
+const { requireAdminToken } = require('../../util')
 
 // sign up as a new user
-async function reset(parent, args, context) {
-  if (!context.adminToken) throw new AuthenticationError('Requires admin token')
-  const { force } = args
+async function reset(parent, { force }, context) {
+  requireAdminToken(context)
   await sync(force)
   return true
 }

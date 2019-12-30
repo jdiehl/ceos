@@ -3,11 +3,21 @@ const { each, getEnv } = require('./util')
 const extensions = require('./extensions')
 
 const PORT = getEnv('PORT', 'int')
+const EXTENSIONS = getEnv('EXTENSIONS', 'array')
 
+// NotFound Error
+class NotFoundError extends apollo.ApolloError {
+  constructor(message = 'Not found') {
+    super(message, 404)
+  }
+}
+
+// apollo settings
 const middlewares = []
 const resolvers = { Query: {}, Mutation: {} }
 const typeDefs = []
 
+// apollo context function
 function context(params) {
   const context = {}
   for (const middleware of middlewares) {
@@ -30,9 +40,10 @@ function use(extension) {
 
 // install standard extensions (core first)
 use(extensions.core)
-each(extensions, ext => {
-  if (ext !== extensions.core) use(ext)
-})
+for (const key of EXTENSIONS) {
+  if (!extensions[key]) throw new Error(`Invalid extension ${key}`)
+  use(extensions[key])
+}
 
 // start the apollo server
 async function serve() {
@@ -49,6 +60,7 @@ module.exports = {
   AuthenticationError: apollo.AuthenticationError,
   ForbiddenError: apollo.ForbiddenError,
   UserInputError: apollo.UserInputError,
+  NotFoundError,
   use,
   serve
 }
