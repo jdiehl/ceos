@@ -92,6 +92,7 @@ function map(object, callback) {
 
 // check if the user has a role
 function requireAccess(context, role) {
+  if (context.adminToken) return
   if (!context.auth || (role && (!context.auth.access || !context.auth.access[role]))) {
     throw new AuthenticationError(`Must be ${role || 'logged in'}`)
   }
