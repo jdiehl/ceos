@@ -16,12 +16,6 @@ async function signupUser(parent, { email, password }, context) {
   const me = new User()
   me.email = email
   me.password = password
-
-  // if admin token is present: make an admin
-  if (context.adminToken) {
-    me.access = { admin: true }
-  }
-
   await me.save()
 
   return makeAuthResponse(me)
@@ -52,7 +46,6 @@ async function createUser(parent, { input }, context) {
 }
 
 async function updateUser(parent, { id, input }, context) {
-  console.log(context.auth)
   requireAccess(context, 'admin')
 
   // find user
