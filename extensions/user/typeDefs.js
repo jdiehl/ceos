@@ -12,6 +12,7 @@ type UserProfile {
 type User {
   id: Int!
   email: String!
+  name: String!
   access: UserAccess
   profile: UserProfile
 }
