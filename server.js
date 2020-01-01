@@ -32,7 +32,11 @@ function use(extension) {
     return extension.forEach(use)
   }
   if (extension.middleware) middlewares.push(extension.middleware)
-  if (extension.resolvers) Object.assign(resolvers, extension.resolvers)
+  if (extension.resolvers) {
+    for (const key of Object.keys(extension.resolvers)) {
+      resolvers[key] = Object.assign(resolvers[key] || {}, extension.resolvers[key])
+    }
+  }
   if (extension.queries) Object.assign(resolvers.Query, extension.queries)
   if (extension.mutations) Object.assign(resolvers.Mutation, extension.mutations)
   if (extension.typeDefs) typeDefs.push(extension.typeDefs)
