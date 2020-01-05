@@ -8,6 +8,7 @@ type CalendarDay {
 }
 
 extend type Query {
+  calendarMonth(shift: Int): [CalendarDay]
   calendarWeek(shift: Int): [CalendarDay]
   calendarWorkweek(shift: Int): [CalendarDay]
 }
