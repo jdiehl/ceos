@@ -14,14 +14,28 @@ const options = {
 }
 
 // the server
-exports.sequelize = new Sequelize(DB, options)
-
-// Sequelize
-exports.Sequelize = Sequelize
-exports.Op = Op
+const sequelize = new Sequelize(DB, options)
 
 // sync database
-exports.sync = async (force) => {
-  await exports.sequelize.query('create extension if not exists hstore')
-  await exports.sequelize.sync({ force })
+async function sync(force) {
+  await sequelize.query('create extension if not exists hstore')
+  await sequelize.sync({ force })
+}
+
+// helper functions
+function isBetween(a, b) {
+  return {
+    [Op.and]: {
+      [Op.gte]: a,
+      [Op.lt]: b
+    }
+  }
+}
+
+module.exports = {
+  sequelize,
+  Sequelize,
+  Op,
+  sync,
+  isBetween
 }

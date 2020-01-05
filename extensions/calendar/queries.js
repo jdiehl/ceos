@@ -27,6 +27,8 @@ function calendarWeek(parent, { shift }, context) {
 
 function calendarWorkweek(parent, { shift }, context) {
   const date = moment().add(shift || 0, 'week')
+  const day = date.day()
+  if (day < 1 || day > 5) date.add(1, 'week')
   return makeDays(date, 'isoWeek', 5)
 }
 

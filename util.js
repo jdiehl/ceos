@@ -1,6 +1,7 @@
 const { AuthenticationError } = require('apollo-server')
 const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
+const { Op } = require('sequelize')
 const ms = require('ms')
 
 // convert value from Hstore
@@ -90,6 +91,13 @@ function map(object, callback) {
   return res
 }
 
+// find an object in an array
+function find(array, test) {
+  for (const obj of array) {
+    if (test(obj)) return obj
+  }
+}
+
 // check if the user has a role
 function requireAccess(context, role) {
   if (context.adminToken) return
@@ -102,7 +110,6 @@ function requireAccess(context, role) {
 function requireAdminToken(context) {
   if (!context.adminToken) throw new AuthenticationError('Requires admin token')
 }
-
 module.exports = {
   fromHstore,
   getEnv,
@@ -113,6 +120,7 @@ module.exports = {
   verifyHash,
   each,
   map,
+  find,
   requireAccess,
   requireAdminToken
 }
