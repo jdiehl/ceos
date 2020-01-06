@@ -1,5 +1,5 @@
 const apollo = require('apollo-server')
-const { each, getEnv } = require('./util')
+const { getEnv } = require('./util')
 const extensions = require('./extensions')
 
 const PORT = getEnv('PORT', 'int')

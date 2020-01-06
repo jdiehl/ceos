@@ -1,7 +1,6 @@
 const { AuthenticationError } = require('apollo-server')
 const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
-const { Op } = require('sequelize')
 const ms = require('ms')
 
 // convert value from Hstore
