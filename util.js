@@ -22,6 +22,10 @@ function getEnv(name, type, defaultValue) {
     throw new Error(`Missing environment variable ${name}`)
   }
   switch (type) {
+    case 'bool':
+    case 'boolean':
+      value = value.toLowerCase() === 'true' || value === '1'
+      break
     case 'int':
       value = parseInt(value, 10)
       if (isNaN(value)) throw new Error(`Invalid environment variable ${name}: must be an integer`)

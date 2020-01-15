@@ -20,8 +20,10 @@
     "holiday-de": "^1.1.3",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
+    "nodemailer": "^6.4.2",
     "pg": "^7.15.1",
     "pg-hstore": "^2.3.3",
+    "pug": "^2.0.4",
     "sequelize": "^5.21.3"
   },
   "devDependencies": {
