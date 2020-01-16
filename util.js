@@ -2,6 +2,7 @@ const { AuthenticationError } = require('apollo-server')
 const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
 const ms = require('ms')
+const moment = require('moment')
 
 // convert value from Hstore
 function fromHstore(obj) {
@@ -117,6 +118,19 @@ function requireAccess(context, roles) {
 function requireAdminToken(context) {
   if (!context.adminToken) throw new AuthenticationError('Requires admin token')
 }
+
+// schedule
+function schedule(triggerFunction, dateFunction) {
+  const now = new Date()
+  const fireDate = dateFunction(now)
+  const interval = fireDate - now
+  if (isNaN(interval) || interval < 0) throw new Error(`Invalid fire date returned: ${fireDate}`)
+  setTimeout(() => {
+    triggerFunction()
+    schedule(dateFunction, triggerFunction)
+  }, interval)
+}
+
 module.exports = {
   fromHstore,
   getEnv,
@@ -129,5 +143,6 @@ module.exports = {
   map,
   find,
   requireAccess,
-  requireAdminToken
+  requireAdminToken,
+  schedule
 }
