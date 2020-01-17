@@ -127,7 +127,7 @@ function schedule(triggerFunction, dateFunction) {
   if (isNaN(interval) || interval < 0) throw new Error(`Invalid fire date returned: ${fireDate}`)
   setTimeout(() => {
     triggerFunction()
-    schedule(dateFunction, triggerFunction)
+    setTimeout(() => schedule(triggerFunction, dateFunction), 60000)
   }, interval)
 }
 
