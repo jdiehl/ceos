@@ -119,16 +119,15 @@ function requireAdminToken(context) {
   if (!context.adminToken) throw new AuthenticationError('Requires admin token')
 }
 
-// schedule
-function schedule(triggerFunction, dateFunction) {
-  const now = new Date()
-  const fireDate = dateFunction(now)
-  const interval = fireDate - now
-  if (isNaN(interval) || interval < 0) throw new Error(`Invalid fire date returned: ${fireDate}`)
-  setTimeout(() => {
-    triggerFunction()
-    setTimeout(() => schedule(triggerFunction, dateFunction), 60000)
-  }, interval)
+// wait for time or date
+async function wait(time) {
+  if (time && time instanceof Date) {
+    time -= new Date()
+  }
+  let id
+  const res = new Promise(resolve => { id = setTimeout(resolve, time) })
+  res.cancel = () => { clearInterval(id) }
+  return res
 }
 
 module.exports = {
@@ -144,5 +143,6 @@ module.exports = {
   find,
   requireAccess,
   requireAdminToken,
-  schedule
+  schedule,
+  wait
 }
