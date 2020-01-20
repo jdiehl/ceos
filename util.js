@@ -2,7 +2,6 @@ const { AuthenticationError } = require('apollo-server')
 const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
 const ms = require('ms')
-const moment = require('moment')
 
 // convert value from Hstore
 function fromHstore(obj) {
@@ -143,6 +142,5 @@ module.exports = {
   find,
   requireAccess,
   requireAdminToken,
-  schedule,
   wait
 }
