@@ -34,6 +34,18 @@ async function loginUser(parent, { email, password }) {
   return makeAuthResponse(me)
 }
 
+async function extendLoginUser(parent, args, context) {
+  requireAccess(context)
+  const { id } = context.auth
+
+  // find user
+  const me = await User.findByPk(id)
+  if (!me) throw new NotFoundError()
+
+  // create a new session
+  return makeAuthResponse(me)
+}
+
 async function createUser(parent, { input }, context) {
   requireAccess(context, 'admin')
 
@@ -61,19 +73,15 @@ async function updateUser(parent, { id, input }, context) {
 
 async function deleteUser(parent, { id }, context) {
   requireAccess(context, 'admin')
-
-  // find user
-  const user = User.findByPk(id)
-  if (!user) throw new NotFoundError()
-
-  await user.destroy()
-
+  const rows = await User.destroy({ where: { id } })
+  if (!rows) throw new NotFoundError()
   return true
 }
 
 module.exports = {
   signupUser,
   loginUser,
+  extendLoginUser,
   createUser,
   updateUser,
   deleteUser
