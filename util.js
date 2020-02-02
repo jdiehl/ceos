@@ -103,12 +103,12 @@ function find(array, test) {
 
 // check if the user has a role
 function requireAccess(context, roles) {
-  if (context.adminToken) return
+  if (context.adminToken) return context.auth
   if (!context.auth) throw new AuthenticationError('Must be logged in')
-  if (!roles) return
+  if (!roles) return context.auth
   if (!(roles instanceof Array)) roles = [roles]
   for (const role of roles) {
-    if (context.auth.access[role]) return
+    if (context.auth.access[role]) return context.auth
   }
   throw new AuthenticationError(`Must be ${roles.join(' or ')}`)
 }
