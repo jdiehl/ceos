@@ -1,5 +1,5 @@
 const { Sequelize, sequelize } = require('../../sequelize')
-const { fromHstore, makeHash, makeSalt, verifyHash } = require('../../util')
+const { makeHash, makeSalt, verifyHash } = require('../../util')
 
 class User extends Sequelize.Model {
   get name() {
@@ -35,12 +35,10 @@ User.init({
     allowNull: false
   },
   access: {
-    type: Sequelize.HSTORE,
-    get() { return fromHstore(this.getDataValue('access')) }
+    type: Sequelize.JSONB
   },
   profile: {
-    type: Sequelize.HSTORE,
-    get() { return fromHstore(this.getDataValue('profile')) }
+    type: Sequelize.JSONB
   }
 }, {
   sequelize,
