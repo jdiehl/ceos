@@ -3,17 +3,6 @@ const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
 const ms = require('ms')
 
-// convert value from Hstore
-function fromHstore(obj) {
-  return map(obj, value => {
-    if (value === 'true') return true
-    if (value === 'false') return false
-    const n = parseFloat(value)
-    if (!isNaN(n)) return n
-    return value
-  })
-}
-
 // read an environment variable
 function getEnv(name, type, defaultValue) {
   let value = process.env[name]
@@ -130,7 +119,6 @@ async function wait(time) {
 }
 
 module.exports = {
-  fromHstore,
   getEnv,
   encodeJWT,
   decodeJWT,

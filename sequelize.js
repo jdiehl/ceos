@@ -18,7 +18,6 @@ const sequelize = new Sequelize(DB, options)
 
 // sync database
 async function sync(force) {
-  await sequelize.query('create extension if not exists hstore')
   await sequelize.sync({ force })
 }
 

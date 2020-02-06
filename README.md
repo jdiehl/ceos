@@ -27,6 +27,8 @@ Opinionated graphql server based on apollo-server and sequelize
 * `ADMIN_TOKEN`: Bearer Token for admin access
 * `JWT_SECRET`: Secret used to encrypt JSON Web Token (use a random string here)
 * `JWT_EXPIRES`: Expiry time of the JSON Web Token (see [jsonwebtoken documentation](https://github.com/auth0/node-jsonwebtoken#readme) for details)
+* `SENDGRID_API_KEY`: [Sendgrid](https://sendgrid.com) API Key
+* `SENDGRID_FROM`: Sendgrid sender email address
 * `EXTENSIONS`: Specify which extensions to load
 * `CALENDAR_STATE`: `holiday-de` state to use for determining holidays
 
