@@ -1,4 +1,4 @@
-const { AuthenticationError, NotFoundError } = require('apollo-server')
+const { AuthenticationError, NotFoundError } = require('apollo-server-express')
 
 const { encodeJWT, requireAccess } = require('../../util')
 const User = require('./User')

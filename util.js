@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('apollo-server')
+const { AuthenticationError } = require('apollo-server-express')
 const { randomBytes, createHmac } = require('crypto')
 const { sign, verify } = require('jsonwebtoken')
 const ms = require('ms')

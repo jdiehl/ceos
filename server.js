@@ -1,4 +1,5 @@
-const apollo = require('apollo-server')
+const express = require('express')
+const apollo = require('apollo-server-express')
 const { getEnv } = require('./util')
 const extensions = require('./extensions')
 
@@ -49,13 +50,18 @@ for (const key of EXTENSIONS) {
   use(extensions[key])
 }
 
-// start the apollo server
+const app = express()
+
+// start the express server
 async function serve() {
   const server = new apollo.ApolloServer({ typeDefs, resolvers, context })
-  return server.listen(PORT, '0.0.0.0')
+  server.applyMiddleware({ app, path: '/api' })
+  const instance = await app.listen(PORT, '0.0.0.0')
+  return instance.address()
 }
 
 module.exports = {
+  app,
   apollo,
   gql: apollo.gql,
   ApolloError: apollo.ApolloError,
