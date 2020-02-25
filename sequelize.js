@@ -3,6 +3,9 @@ const { getEnv } = require('./util')
 
 const DB = getEnv('DB')
 const DB_POOL = getEnv('DB_POOL', 'int')
+const NODE_ENV = getEnv('NODE_ENV', 'string', 'development')
+
+const logging = NODE_ENV.toLowerCase() !== 'production'
 
 const options = {
   pool: {
@@ -10,7 +13,8 @@ const options = {
     min: 0,
     acquire: 30000,
     idle: 10000
-  }
+  },
+  logging
 }
 
 // the server
