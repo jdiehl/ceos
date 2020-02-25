@@ -5,7 +5,7 @@ const DB = getEnv('DB')
 const DB_POOL = getEnv('DB_POOL', 'int')
 const NODE_ENV = getEnv('NODE_ENV', 'string', 'development')
 
-const logging = NODE_ENV.toLowerCase() !== 'production'
+const logging = NODE_ENV.toLowerCase() === 'production' ? false : console.log
 
 const options = {
   pool: {
