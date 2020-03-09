@@ -1,13 +1,21 @@
-const { sync } = require('../../sequelize')
+const db = require('../../sequelize')
 const { requireAdminToken } = require('../../util')
 
-// sign up as a new user
+// reset database
 async function reset(parent, { force }, context) {
   requireAdminToken(context)
-  await sync(force)
+  await db.sync(force)
+  return true
+}
+
+// migrate database
+async function migrate(parent, { to, direction }, context) {
+  requireAdminToken(context)
+  await db.migrate(to, direction)
   return true
 }
 
 module.exports = {
-  reset
+  reset,
+  migrate
 }

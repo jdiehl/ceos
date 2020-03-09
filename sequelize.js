@@ -1,4 +1,5 @@
 const { Op, Sequelize } = require('sequelize')
+const Umzug = require('umzug')
 const { getEnv } = require('./util')
 
 const DB = getEnv('DB')
@@ -25,6 +26,23 @@ async function sync(force) {
   await sequelize.sync({ force })
 }
 
+// migrate database
+async function migrate(to, direction = 'up') {
+  const umzug = new Umzug({
+    migrations: {
+      path: './migrations',
+      params: [sequelize.getQueryInterface(), Sequelize]
+    },
+    storage: 'sequelize',
+    storageOptions: { sequelize }
+  })
+  if (direction === 'down') {
+    await umzug.down({ to })
+  } else {
+    await umzug.up({ to })
+  }
+}
+
 // helper functions
 function isBetween(a, b) {
   return {
@@ -40,5 +58,6 @@ module.exports = {
   Sequelize,
   Op,
   sync,
+  migrate,
   isBetween
 }

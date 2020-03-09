@@ -10,7 +10,13 @@ type Query {
   ping: Boolean
 }
 
+enum MigrateDirection {
+  up
+  down
+}
+
 type Mutation {
   reset(force: Boolean!): Boolean
+  migrate(to: String, direction: MigrateDirection): Boolean
 }
 `
