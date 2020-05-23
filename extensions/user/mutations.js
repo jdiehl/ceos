@@ -1,4 +1,10 @@
-const { AuthenticationError, NotFoundError } = require('apollo-server-express')
+const { AuthenticationError, ApolloError } = require('apollo-server-express')
+
+class NotFoundError extends ApolloError {
+  constructor(message = 'Not found') {
+    super(message, 404)
+  }
+}
 
 const { encodeJWT, requireAccess } = require('../../util')
 const User = require('./User')
@@ -22,7 +28,6 @@ async function signupUser(parent, { email, password }, context) {
 }
 
 async function loginUser(parent, { email, password }) {
-
   // find user
   const me = await User.findOne({ where: { email } })
   if (!me) throw new NotFoundError()
