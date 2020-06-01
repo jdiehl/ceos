@@ -8,7 +8,9 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/**/*"],
+  "files": [
+    "dist/**/*"
+  ],
   "keywords": [],
   "author": "Jonathan Diehl",
   "license": "ISC",
@@ -25,7 +27,6 @@
     "class-validator": "^0.12.2",
     "express": "^4.17.1",
     "graphql": "^15.0.0",
-    "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.4.8",
     "pug": "^3.0.0",
     "reflect-metadata": "^0.1.13",

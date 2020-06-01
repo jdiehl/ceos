@@ -1,7 +1,7 @@
 import http from 'http'
 import { AddressInfo } from 'net'
 import express from 'express'
-import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import { Service, Container } from 'typedi'
 import { buildSchema, ResolverData, AuthChecker } from 'type-graphql'
 import { Config } from './Config'
