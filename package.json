@@ -1,7 +1,7 @@
 {
   "name": "ceos",
   "version": "2.0.0",
-  "description": "Ceos is an opinionated graphql server based on apollo-server and sequelize",
+  "description": "Ceos is an opinionated graphql server based on typedi, typeorm, and type-graphql",
   "repository": {
     "type": "git",
     "url": "https://github.com/jdiehl/ceos.git"
