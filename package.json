@@ -1,18 +1,19 @@
 {
   "name": "ceos",
-  "version": "1.0.20",
+  "version": "2.0.0",
   "description": "Ceos is an opinionated graphql server based on apollo-server and sequelize",
   "repository": {
     "type": "git",
     "url": "https://github.com/jdiehl/ceos.git"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "keywords": [],
   "author": "Jonathan Diehl",
   "license": "ISC",
   "scripts": {
     "lint": "tslint -p .",
-    "build": "tsc index.ts"
+    "build": "tsc -p ."
   },
   "dependencies": {
     "@types/node": "^14.0.6",
@@ -25,7 +26,6 @@
     "graphql": "^15.0.0",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.4.8",
-    "pg": "^8.2.1",
     "pug": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.0.0-rc.2",

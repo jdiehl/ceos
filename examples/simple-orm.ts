@@ -1,7 +1,6 @@
 /* tslint:disable:max-classes-per-file no-console */
 
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
-import { Service } from 'typedi'
 import { Extension, use, ceos } from '..'
 import { Arg, ObjectType, Field, Resolver, Query, Mutation } from 'type-graphql'
 
