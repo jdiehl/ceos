@@ -1,3 +1,5 @@
+/* tslint:disable:max-classes-per-file no-console */
+
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
 import { Service } from 'typedi'
 import { Extension, use, ceos } from '..'
@@ -13,7 +15,6 @@ export class Post {
   @Field() @Column() title!: string
 }
 
-@Service()
 @Resolver(Post)
 class PostResolver extends Extension {
 
@@ -27,7 +28,7 @@ class PostResolver extends Extension {
   }
 
   @Mutation(() => Boolean)
-  async addPost(@Arg('title') title: string): Promise<Boolean> {
+  async addPost(@Arg('title') title: string): Promise<boolean> {
     await this.postStore.insert({ title })
     return true
   }

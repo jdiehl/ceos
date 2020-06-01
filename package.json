@@ -11,7 +11,7 @@
   "author": "Jonathan Diehl",
   "license": "ISC",
   "scripts": {
-    "test": "tslint *.ts",
+    "lint": "tslint -p .",
     "build": "tsc index.ts"
   },
   "dependencies": {

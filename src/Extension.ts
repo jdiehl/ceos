@@ -5,7 +5,7 @@ import { Server } from './Server'
 
 @Service()
 export class Extension {
-  
+
   @Inject() protected config!: Config
   @Inject() protected database!: Database
   @Inject() protected server!: Server

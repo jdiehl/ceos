@@ -1,6 +1,7 @@
+/* tslint:disable:max-classes-per-file no-console */
+
 import { use, ceos, Extension } from '..'
 import { Arg, ObjectType, Field, Resolver, Query, Mutation } from 'type-graphql'
-import { Service } from 'typedi'
 
 @ObjectType()
 class Post {
@@ -16,7 +17,7 @@ class PostResolver extends Extension {
     return this.posts
   }
   @Mutation(() => Boolean)
-  async addPost(@Arg('title') title: string): Promise<Boolean> {
+  async addPost(@Arg('title') title: string): Promise<boolean> {
     this.posts.push({ title })
     return true
   }
