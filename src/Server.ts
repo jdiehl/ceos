@@ -5,6 +5,7 @@ import { ApolloServer } from 'apollo-server-express'
 import { Service, Container } from 'typedi'
 import { buildSchema, ResolverData, AuthChecker } from 'type-graphql'
 import { Config } from './Config'
+import { Class } from './types'
 
 // TODO: https://github.com/serhiisol/node-decorators#readme
 
@@ -15,7 +16,7 @@ export class Server {
   readonly app: express.Application
 
   private server?: http.Server
-  private resolvers: any = []
+  private resolvers: Class[] = []
   private contextBuilders: ContextBuilder[] = []
   private authCheckers: AuthChecker[] = []
 
@@ -24,7 +25,7 @@ export class Server {
     this.app = express()
   }
 
-  addResolver(resolver: any) {
+  addResolver(resolver: Class) {
     this.resolvers.push(resolver)
   }
 
@@ -66,7 +67,7 @@ export class Server {
 
   private async setupApollo() {
     const schema = await buildSchema({
-      resolvers: this.resolvers,
+      resolvers: this.resolvers as any,
       container: Container,
       authChecker: (res: ResolverData, roles: string[]) => this.checkAuth(res, roles)
     })

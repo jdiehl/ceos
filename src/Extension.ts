@@ -4,7 +4,7 @@ import { Database } from './Database'
 import { Server } from './Server'
 
 @Service()
-export class Extension {
+export abstract class Extension {
 
   @Inject() protected config!: Config
   @Inject() protected database!: Database
