@@ -71,7 +71,6 @@ export class Server {
       resolvers: this.resolvers as any,
       container: Container,
       authChecker: (res: ResolverData, roles: string[]) => this.checkAuth(res, roles),
-      emitSchemaFile: 'schema.gql',
       scalarsMap: [{ type: JSONObject, scalar: GraphQLJSONScalar }]
     })
     const apollo = new ApolloServer({
