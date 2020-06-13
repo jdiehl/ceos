@@ -12,6 +12,7 @@ export class Database {
 
   constructor(private config: Config) {
     this.config.define('DB')
+    this.config.define('DB_SYNC', 'boolean', false)
   }
 
   async start() {
@@ -20,6 +21,9 @@ export class Database {
       const type = this.dbTypeFromURL(url)
       this._connection = getConnectionManager().create({ type, url, entities: this.entities })
       await this.connection.connect()
+      if (this.config.get<boolean>('DB_SYNC')) {
+        await this._connection.synchronize()
+      }
     }
   }
 

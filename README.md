@@ -15,6 +15,7 @@ Opinionated graphql server based on [TypeDI](https://github.com/typestack/typedi
 
 * `PORT`: The listening port of the server
 * `DB`: Database configuration: `postgres://postgres@[SERVER]:5432/[DATABASE]`
+* `DB_SYNC`: Automatically synchronize database models
 * `MAIL`: Mail configuration: `smtp://[USER]:[PASSWORD]@[HOST]:[PORT]`
 * `MAIL_FROM`: Sender email
 
