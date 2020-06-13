@@ -1,5 +1,6 @@
 export * from './Bootstrapper'
 export * from './Config'
+export * from './Database'
 export * from './Extension'
 export * from './JSONObject'
 export * from './Mail'
