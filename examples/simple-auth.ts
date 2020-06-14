@@ -20,7 +20,7 @@ class AuthResolver extends Extension {
   async init() {
     this.server.addResolver(AuthResolver)
     this.server.addContextBuilder((_, context) => context.role = 'user')
-    this.server.addAuthChecker(({ context }, roles) => roles.indexOf(context.role) >= 0)
+    this.server.addAuthChecker(({ context }, roles) => roles.includes(context.role))
   }
 }
 
