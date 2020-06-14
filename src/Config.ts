@@ -16,7 +16,7 @@ function typedValue(key: string, value: string, type: ConfigType): any {
 
 @Service()
 export class Config {
-  data: Record<string, any> = {}
+  private data: Record<string, any> = {}
 
   get<T = string>(key: string): T {
     if (!this.data.hasOwnProperty(key)) throw new ConfigKeyUndefinedError(key)
