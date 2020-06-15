@@ -23,12 +23,13 @@ export class Config {
     return this.data[key]
   }
 
-  define(key: string, type: ConfigType = 'string', defaultValue?: any) {
+  define<T = string>(key: string, type: ConfigType = 'string', defaultValue?: any): T {
     if (this.data.hasOwnProperty(key)) throw new ConfigKeyAlreadyDefinedError(key)
     if (process.env[key] === undefined && defaultValue !== undefined) {
       this.data[key] = defaultValue
     } else {
       this.data[key] = typedValue(key, process.env[key]!, type)
     }
+    return this.data[key]
   }
 }
