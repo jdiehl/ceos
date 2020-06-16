@@ -6,7 +6,8 @@ import { Service, Container } from 'typedi'
 import { buildSchema, ResolverData, AuthChecker } from 'type-graphql'
 import { Config } from './Config'
 import { Class } from './types'
-import { JSONObject, GraphQLJSONScalar } from './JSONObject'
+import { JSONObject } from './JSONObject'
+import { GraphQLJSON } from 'graphql-type-json'
 
 // TODO: https://github.com/serhiisol/node-decorators#readme
 
@@ -71,7 +72,7 @@ export class Server {
       resolvers: this.resolvers as any,
       container: Container,
       authChecker: (res: ResolverData, roles: string[]) => this.checkAuth(res, roles),
-      scalarsMap: [{ type: JSONObject, scalar: GraphQLJSONScalar }]
+      scalarsMap: [{ type: JSONObject, scalar: GraphQLJSON }]
     })
     const apollo = new ApolloServer({
       schema,
