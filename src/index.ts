@@ -5,13 +5,14 @@ import { Ceos } from './Ceos'
 
 export * from './Ceos'
 export * from './Config'
-export * from './Database'
 export * from './CRUDResolver'
+export * from './Database'
+export * from './errors'
+export * from './Extension'
+export * from './JSONObject'
 export * from './Mail'
 export * from './Server'
-export * from './errors'
 export * from './util'
-export * from './Extension'
 
 typeormUseContainer(Container)
 
