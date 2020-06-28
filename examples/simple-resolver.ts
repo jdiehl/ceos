@@ -1,6 +1,6 @@
 /* tslint:disable:max-classes-per-file no-console */
 
-import { use, ceos, Extension } from '..'
+import { ceos, Ceos, Extension } from '..'
 import { Arg, ObjectType, Field, Resolver, Query, Mutation } from 'type-graphql'
 
 @ObjectType()
@@ -9,7 +9,7 @@ class Post {
 }
 
 @Resolver(() => Post)
-class PostResolver extends Extension {
+class PostResolver implements Extension {
   private posts: Post[] = []
 
   @Query(() => [Post])
@@ -22,10 +22,12 @@ class PostResolver extends Extension {
     return true
   }
 
-  async init() {
-    this.server.addResolver(PostResolver)
+  async init(ceos: Ceos) {
+    ceos.server.addResolver(PostResolver)
   }
 }
 
-use(PostResolver)
-ceos().then(server => console.log(`Listening on port ${server.address.port}`), err => console.error(err))
+ceos()
+.use(PostResolver)
+.start()
+.then(ceos => console.log(`Listening on port ${ceos.server.address.port}`), (err: Error) => console.error(err))

@@ -1,10 +1,10 @@
 /* tslint:disable:max-classes-per-file no-console */
 
-import { use, ceos, Extension } from '..'
+import { ceos, Ceos, Extension } from '..'
 import { Resolver, Query, Authorized, Ctx } from 'type-graphql'
 
 @Resolver()
-class AuthResolver extends Extension {
+class AuthResolver implements Extension {
 
   @Authorized('user')
   @Query(() => String)
@@ -17,12 +17,15 @@ class AuthResolver extends Extension {
   async invalid(): Promise<string> {
     return 'invalid'
   }
-  async init() {
-    this.server.addResolver(AuthResolver)
-    this.server.addContextBuilder((_, context) => context.role = 'user')
-    this.server.addAuthChecker(({ context }, roles) => roles.includes(context.role))
+
+  async init(ceos: Ceos) {
+    ceos.server.addResolver(AuthResolver)
+    ceos.server.addContextBuilder((_, context) => context.role = 'user')
+    ceos.server.addAuthChecker(({ context }, roles) => roles.includes(context.role))
   }
 }
 
-use(AuthResolver)
-ceos().then(server => console.log(`Listening on port ${server.address.port}`), err => console.error(err))
+ceos()
+.use(AuthResolver)
+.start()
+.then(ceos => console.log(`Listening on port ${ceos.server.address.port}`), (err: Error) => console.error(err))

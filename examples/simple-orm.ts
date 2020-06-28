@@ -1,7 +1,7 @@
 /* tslint:disable:max-classes-per-file no-console */
 
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
-import { Extension, use, ceos } from '..'
+import { ceos, Ceos, Extension, Database } from '..'
 import { Arg, ObjectType, Field, Resolver, Query, Mutation } from 'type-graphql'
 
 @ObjectType()
@@ -15,7 +15,9 @@ export class Post {
 }
 
 @Resolver(Post)
-class PostResolver extends Extension {
+class PostResolver implements Extension {
+
+  constructor(private database: Database) {}
 
   get postStore() {
     return this.database.repository<Post>(Post)
@@ -32,16 +34,18 @@ class PostResolver extends Extension {
     return true
   }
 
-  async init() {
-    this.database.addEntity(Post)
-    this.server.addResolver(PostResolver)
+  async init(ceos: Ceos) {
+    ceos.database.addEntity(Post)
+    ceos.server.addResolver(PostResolver)
   }
 
-  async start() {
-    await this.database.connection.synchronize(true)
+  async start(ceos: Ceos) {
+    await ceos.database.connection.synchronize(true)
   }
 
 }
 
-use(PostResolver)
-ceos().then(server => console.log(`Listening on port ${server.address.port}`), err => console.error(err))
+ceos()
+.use(PostResolver)
+.start()
+.then(ceos => console.log(`Listening on port ${ceos.server.address.port}`), (err: Error) => console.error(err))

@@ -1,6 +1,6 @@
 {
   "name": "ceos",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "Ceos is an opinionated graphql server based on typedi, typeorm, and type-graphql",
   "repository": {
     "type": "git",
@@ -19,16 +19,15 @@
     "build": "tsc -p ."
   },
   "dependencies": {
-    "@types/node": "^14.0.11",
+    "@types/node": "^14.0.14",
     "@types/nodemailer": "^6.4.0",
     "@types/pug": "^2.0.4",
-    "apollo-server": "^2.14.2",
-    "apollo-server-express": "^2.14.2",
+    "apollo-server-express": "^2.15.0",
     "class-validator": "^0.12.2",
     "express": "^4.17.1",
-    "graphql": "^15.0.0",
+    "graphql": "^15.1.0",
     "graphql-type-json": "^0.3.2",
-    "nodemailer": "^6.4.8",
+    "nodemailer": "^6.4.10",
     "pug": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.0.0-rc.2",
@@ -38,5 +37,8 @@
   "devDependencies": {
     "tslint": "^6.1.2",
     "typescript": "^3.9.5"
+  },
+  "resolutions": {
+    "graphql": "^15.1.0"
   }
 }

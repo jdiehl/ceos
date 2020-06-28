@@ -1,15 +1,7 @@
-import { Inject, Service } from 'typedi'
-import { Config } from './Config'
-import { Database } from './Database'
-import { Server } from './Server'
+import { Ceos } from './Ceos'
 
-@Service()
-export abstract class Extension {
-
-  @Inject() protected config!: Config
-  @Inject() protected database!: Database
-  @Inject() protected server!: Server
-
-  async init(): Promise<void> {}
-  async start(): Promise<void> {}
+export interface Extension {
+  init?(ceos: Ceos): Promise<void>
+  start?(ceos: Ceos): Promise<void>
+  stop?(ceos: Ceos): Promise<void>
 }

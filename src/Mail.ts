@@ -4,7 +4,6 @@ import { Service } from 'typedi'
 import { Config } from './Config'
 import { MailMissingTemplateError } from './errors'
 
-
 export interface MailAttachment {
   filename?: string
   content?: string | Buffer
@@ -27,10 +26,10 @@ export interface MailMessage {
 
 @Service()
 export class Mail {
-  private templates: Record<string, compileTemplate> = {}
-  private transport!: Transporter
+  protected templates: Record<string, compileTemplate> = {}
+  protected transport!: Transporter
 
-  constructor(private config: Config) {
+  constructor(protected config: Config) {
     this.config.define('MAIL')
   }
 

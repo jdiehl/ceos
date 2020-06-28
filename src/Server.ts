@@ -3,13 +3,13 @@ import { AddressInfo } from 'net'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { Service, Container } from 'typedi'
-import { buildSchema, ResolverData, AuthChecker } from 'type-graphql'
-import { Config } from './Config'
-import { Class } from './types'
-import { JSONObject } from './JSONObject'
+import { buildSchema, ResolverData, AuthChecker, ClassType } from 'type-graphql'
 import { GraphQLJSON } from 'graphql-type-json'
+import { Config } from './Config'
+import { JSONObject } from './JSONObject'
 
 // TODO: https://github.com/serhiisol/node-decorators#readme
+// or: https://github.com/typestack/routing-controllers
 
 export type ContextBuilder = (request: express.Request, context: any) => void
 
@@ -17,17 +17,17 @@ export type ContextBuilder = (request: express.Request, context: any) => void
 export class Server {
   readonly app: express.Application
 
-  private server?: http.Server
-  private resolvers: Class[] = []
-  private contextBuilders: ContextBuilder[] = []
-  private authCheckers: AuthChecker[] = []
+  protected server?: http.Server
+  protected resolvers: ClassType[] = []
+  protected contextBuilders: ContextBuilder[] = []
+  protected authCheckers: AuthChecker[] = []
 
-  constructor(private config: Config) {
+  constructor(protected config: Config) {
     this.config.define('PORT', 'int', 3000)
     this.app = express()
   }
 
-  addResolver(resolver: Class) {
+  addResolver(resolver: ClassType) {
     this.resolvers.push(resolver)
   }
 
@@ -52,6 +52,12 @@ export class Server {
     })
   }
 
+  async stop() {
+    return new Promise((resolve, reject) => {
+      this.server!.close(err => err ? reject(err) : resolve())
+    })
+  }
+
   protected makeContext(req: express.Request): any {
     const context: any = {}
     for (const contextBuilder of this.contextBuilders) {
@@ -67,7 +73,7 @@ export class Server {
     return false
   }
 
-  private async setupApollo() {
+  protected async setupApollo() {
     const schema = await buildSchema({
       resolvers: this.resolvers as any,
       container: Container,

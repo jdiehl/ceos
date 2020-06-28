@@ -1,26 +1,21 @@
-export * from './Bootstrapper'
+import 'reflect-metadata'
+import { Container } from 'typedi'
+import { useContainer as typeormUseContainer } from 'typeorm'
+import { Ceos } from './Ceos'
+
+export * from './Ceos'
 export * from './Config'
 export * from './Database'
-export * from './Extension'
-export * from './JSONObject'
+export * from './CRUDResolver'
 export * from './Mail'
 export * from './Server'
 export * from './errors'
-export * from './types'
+export * from './util'
+export * from './Extension'
 
-import 'reflect-metadata'
-import { Container } from 'typedi'
-import { Bootstrapper, Class, Extension, Server } from '.'
+typeormUseContainer(Container)
 
-const bootstrapper = Container.get(Bootstrapper)
-
-// register an extension
-export function use(Ext: Class): void {
-  const extension = Container.get<Extension>(Ext)
-  bootstrapper.use(extension)
-}
-
-// initialize extensions and start the server
-export async function ceos(): Promise<Server> {
-  return bootstrapper.start()
+// return the ceos instance
+export function ceos(): Ceos {
+  return Container.get(Ceos)
 }
