@@ -11,7 +11,7 @@ Opinionated graphql server based on [TypeDI](https://github.com/typestack/typedi
 4. Set up the environment variables in `.env` (see below)
 
 
-## Configuration Variables
+### Configuration Variables
 
 * `PORT`: The listening port of the server
 * `DB`: Database configuration: `postgres://postgres@[SERVER]:5432/[DATABASE]`
@@ -20,29 +20,21 @@ Opinionated graphql server based on [TypeDI](https://github.com/typestack/typedi
 * `MAIL_FROM`: Sender email
 
 
-## Add Your Extensions
+### Examples
 
-TBA
-
-### Model Definition
-
-TBA
+See `examples/` for examples how to use ceos.
 
 
-## Start The Server
+## Development
 
-```typescript
-import { ceos, use } from 'ceos'
-import { MyExtension } from './MyExtension'
-const pkg = require('./package.json')
+Release a new version:
 
-use(MyExtension)
-ceos().then(
-  server => console.log(`${pkg.name} v${pkg.version} listening on port ${server.port}`),
-  error => console.error(error)
-)
-```
-
-## Notes
-
-Ceos is a son of Apollo and namegiver of the island of Ceos.
+1. Run tests: `yarn lint`
+2. Bump the package version to the desired new version: `yarn version`
+3. Commit and push: `git add package.json & git commit -m "bumped to $TAG" & git push`
+4. Create a new branch: `git checkout -b release`
+5. Build the library: `yarn build`
+6. Add dist files: `git add -f dist & git commit -m "added distribution files"`
+7. Create git tag: `git tag $TAG & git push --tags`
+8. Publish the library: `npm publish`
+9. Clean up: `git checkout master & git branch -f --delete release`
