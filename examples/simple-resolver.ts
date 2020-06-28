@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file no-console */
-
 import { ceos, Ceos, Extension } from '..'
 import { Arg, ObjectType, Field, Resolver, Query, Mutation } from 'type-graphql'
 

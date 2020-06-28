@@ -15,12 +15,12 @@ export class Database {
     this.config.define('DB_SYNC', 'boolean', false)
   }
 
-  addEntity(entity: ClassType) {
+  addEntity(entity: ClassType): void {
     if (this._connection) throw new DatabaseAlreadyConnectedError()
     this.entities.push(entity)
   }
 
-  async start() {
+  async start(): Promise<void> {
     const url = this.config.get('DB')
     if (url) {
       const type = this.dbTypeFromURL(url)
@@ -32,7 +32,7 @@ export class Database {
     }
   }
 
-  async stop() {
+  async stop(): Promise<void> {
     await this.connection.close()
   }
 
@@ -51,6 +51,7 @@ export class Database {
 
   protected dbTypeFromURL(url: string): any {
     const { protocol } = parse(url)
-    return protocol!.substr(0, protocol!.length - 1)
+    if (!protocol) throw new Error(`Invalid database url: ${url}`)
+    return protocol.substr(0, protocol.length - 1)
   }
 }

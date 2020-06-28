@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file no-console */
-
 import { ceos, Ceos, Extension } from '..'
 import { Resolver, Query, Authorized, Ctx } from 'type-graphql'
 

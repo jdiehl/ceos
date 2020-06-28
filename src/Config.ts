@@ -19,17 +19,19 @@ export class Config {
   protected data: Record<string, any> = {}
 
   get<T = string>(key: string): T {
-    if (!this.data.hasOwnProperty(key)) throw new ConfigKeyUndefinedError(key)
+    if (!Object.prototype.hasOwnProperty.call(this.data, key)) throw new ConfigKeyUndefinedError(key)
     return this.data[key]
   }
 
-  define<T = string>(key: string, type: ConfigType = 'string', defaultValue?: any): T {
-    if (this.data.hasOwnProperty(key)) throw new ConfigKeyAlreadyDefinedError(key)
-    if (process.env[key] === undefined && defaultValue !== undefined) {
-      this.data[key] = defaultValue
+  define<T = string>(key: string, type: ConfigType = 'string', defaultValue?: string | number | boolean): T {
+    if (Object.prototype.hasOwnProperty.call(this.data, key)) throw new ConfigKeyAlreadyDefinedError(key)
+    let value: any = process.env[key]
+    if (value === undefined) {
+      value = defaultValue
     } else {
-      this.data[key] = typedValue(key, process.env[key]!, type)
+      value = typedValue(key, value, type)
     }
+    this.data[key] = value
     return this.data[key]
   }
 }

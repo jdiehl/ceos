@@ -51,7 +51,7 @@ export class Ceos {
 
   private async triggerExtensions(method: LifecycleEvents) {
     await Promise.all(this.extensions.map(async extension => {
-      if (extension[method]) await extension[method]!(this)
+      if (extension[method]) await extension[method](this)
     }))
   }
 }

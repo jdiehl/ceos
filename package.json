@@ -15,7 +15,7 @@
   "author": "Jonathan Diehl",
   "license": "ISC",
   "scripts": {
-    "lint": "tslint -p .",
+    "lint": "eslint . --ext .js,.ts",
     "build": "tsc -p ."
   },
   "dependencies": {
@@ -35,7 +35,9 @@
     "typeorm": "^0.2.25"
   },
   "devDependencies": {
-    "tslint": "^6.1.2",
+    "@typescript-eslint/eslint-plugin": "^3.4.0",
+    "@typescript-eslint/parser": "^3.4.0",
+    "eslint": "^7.3.1",
     "typescript": "^3.9.5"
   },
   "resolutions": {

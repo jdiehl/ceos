@@ -9,7 +9,6 @@ import { JSONObject } from './JSONObject'
 export function CRUDResolver<T extends ClassType, I extends ClassType>(ObjectClass: T, InputClass: I, objectName: string, objectNames = `${objectName}s`): any {
 
   @Resolver({ isAbstract: true })
-  // tslint:disable-next-line:no-shadowed-variable
   abstract class CRUDResolver<T, I> {
 
     // count

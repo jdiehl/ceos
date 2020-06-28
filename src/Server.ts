@@ -27,15 +27,15 @@ export class Server {
     this.app = express()
   }
 
-  addResolver(resolver: ClassType) {
+  addResolver(resolver: ClassType): void {
     this.resolvers.push(resolver)
   }
 
-  addContextBuilder(contextBuilder: ContextBuilder) {
+  addContextBuilder(contextBuilder: ContextBuilder): void {
     this.contextBuilders.push(contextBuilder)
   }
 
-  addAuthChecker(authChecker: AuthChecker<any>) {
+  addAuthChecker(authChecker: AuthChecker<any>): void {
     this.authCheckers.push(authChecker)
   }
 
@@ -43,18 +43,19 @@ export class Server {
     return this.server?.address() as AddressInfo
   }
 
-  async start() {
+  async start(): Promise<void> {
     if (this.resolvers.length > 0) {
       await this.setupApollo()
     }
     return new Promise((resolve) => {
-      this.server = this.app.listen(this.config.get('PORT'), () => resolve(this))
+      this.server = this.app.listen(this.config.get('PORT'), resolve)
     })
   }
 
-  async stop() {
+  async stop(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.server!.close(err => err ? reject(err) : resolve())
+      if (!this.server) return
+      this.server.close(err => err ? reject(err) : resolve())
     })
   }
 
@@ -73,7 +74,7 @@ export class Server {
     return false
   }
 
-  protected async setupApollo() {
+  protected async setupApollo(): Promise<void> {
     const schema = await buildSchema({
       resolvers: this.resolvers as any,
       container: Container,

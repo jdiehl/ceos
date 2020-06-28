@@ -27,24 +27,17 @@ export interface MailMessage {
 @Service()
 export class Mail {
   protected templates: Record<string, compileTemplate> = {}
-  protected transport!: Transporter
+  protected _transport?: Transporter
 
   constructor(protected config: Config) {
     this.config.define('MAIL')
   }
 
-  async init() {
-    const mail = this.config.get('MAIL')
-    if (mail) {
-      this.transport = createTransport(mail)
-    }
-  }
-
-  addTemplate(name: string, file: string) {
+  addTemplate(name: string, file: string): void {
     this.templates[name] = compileFile(file)
   }
 
-  async send(message: MailMessage) {
+  async send(message: MailMessage): Promise<void> {
     if (message.template) {
       const template = this.templates[message.template]
       if (!template) throw new MailMissingTemplateError(message.template)
@@ -53,6 +46,15 @@ export class Mail {
       delete message.variables
     }
     await this.transport.sendMail(message)
+  }
+
+  protected get transport(): Transporter {
+    if (!this._transport) {
+      const mail = this.config.get('MAIL')
+      if (!mail) throw new Error(`Missing mail configuration`)
+      this._transport = createTransport(mail)
+    }
+    return this._transport
   }
 
 }

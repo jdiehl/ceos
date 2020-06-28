@@ -1,5 +1,3 @@
-/* tslint:disable:max-classes-per-file */
-
 import { ApolloError } from 'apollo-server-express'
 
 export class ConfigKeyUndefinedError extends Error {
